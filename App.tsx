@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -24,6 +24,11 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {
+  CustomSwitchComponent,
+  CustomSwitchOnChange,
+  CustomSwitchProps,
+} from './custom-switch-package/src';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -57,9 +62,14 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [isChecked, setIsChecked] = useState(false);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+
+  const handleSwitchChange: CustomSwitchOnChange = event => {
+    setIsChecked(event.nativeEvent.value);
   };
 
   return (
@@ -76,10 +86,20 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
+          <View>
+            <CustomSwitchComponent
+              value={isChecked}
+              onValueChange={handleSwitchChange}
+              style={{width: 50, height: 50}}
+            />
+          </View>
+          {isChecked && (
+            <Section title="Step One">
+              Edit <Text style={styles.highlight}>App.tsx</Text> to change this
+              screen and then come back to see your edits.
+            </Section>
+          )}
+
           <Section title="See Your Changes">
             <ReloadInstructions />
           </Section>
