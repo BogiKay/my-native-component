@@ -21,7 +21,7 @@ class CustomSwitchViewManager : SimpleViewManager<CustomSwitchView>() {
     }
 
     @ReactProp(name = "value")
-    override fun setValue(view: CustomSwitchView?, value: Boolean) {
+    fun setValue(view: CustomSwitchView?, value: Boolean) {
         view?.setChecked(value)
     }
 
@@ -38,10 +38,13 @@ class CustomSwitchViewManager : SimpleViewManager<CustomSwitchView>() {
         }
     }
 
-    override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any>? {
-        return MapBuilder.of(
-            CustomSwitchValueChangeEvent.EVENT_NAME,
-            MapBuilder.of("registrationName", CustomSwitchValueChangeEvent.PROP_NAME)
+    override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
+        return mapOf(
+            CustomSwitchValueChangeEvent.EVENT_NAME to mapOf(
+                "phasedRegistrationNames" to mapOf(
+                    "bubbled" to "onValueChange"
+                )
+            )
         )
     }
 
